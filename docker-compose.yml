@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  spring-boot-prometheus:
+    container_name: spring-boot-prometheus
+    #image: dockerhub/
+    build:
+      context: .
+    ports:
+      - 8080:8080
+
+  prometheus:
+    container_name: prometheus
+    #image: dockerhub/
+    build:
+      context: /prometheus/.
+      args:
+        - --config.file=/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    depends_on:
+      - spring-boot-prometheus
+
+
+  grafana:
+    container_name: grafana
+    image: grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
