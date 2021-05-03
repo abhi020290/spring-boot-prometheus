@@ -8,6 +8,8 @@ services:
       context: .
     ports:
       - 8080:8080
+    links:
+      - prometheus
 
   prometheus:
     container_name: prometheus
@@ -22,6 +24,12 @@ services:
       - spring-boot-prometheus
     volumes:
       - PROMETHEUS:data/prometheus
+    restart:
+      - on-failure
+      - unless-stopped
+    links:
+      - grafana
+
 
 
   grafana:
